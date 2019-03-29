@@ -33,4 +33,5 @@ while True:
     client_socket.sendall(struct.pack(">L", size) + data)
     img_counter += 1
 
-cam.release()
+cam0.release()
+cam1.release()
