@@ -6,11 +6,7 @@ import time
 import pickle
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-<<<<<<< HEAD
 client_socket.connect(('192.168.2.1', 5003))
-=======
-client_socket.connect(('192.168.2.1', 8485))
->>>>>>> e470584a9a3894a7b4c9ecd18f31021f3619a106
 connection = client_socket.makefile('wb')
 
 cam0 = cv2.VideoCapture(0)
