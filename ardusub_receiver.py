@@ -6,8 +6,8 @@ import numpy as np
 import struct 
 import zlib
 
-HOST=''
-PORT=8485
+HOST='192.168.2.1'
+PORT=5003
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 print('Socket created')
@@ -19,37 +19,54 @@ print('Socket now listening')
 
 conn,addr=s.accept()
 
-data = b""
-payload_size = struct.calcsize("<L")
+data0 = b""
+data1 = b""
+payload_size = struct.calcsize(">L")
 print("payload_size: {}".format(payload_size))
 while True:
-    while len(data) < payload_size:
-        print("Recv: {}".format(len(data)))
-        data += conn.recv(4096)
-    print(len(data),data[0])
-    print("Done Recv: {}".format(len(data)))
-    packed_msg_size = data[:payload_size]
-    data = data[payload_size:]
-    print(packed_msg_size[1])
-    msg_size = packed_msg_size[0]
+    ######################DATA0######################################
+    while len(data0) < payload_size:
+        print("Recv: {}".format(len(data0)))
+        data0 += conn.recv(4096)
+
+    print("Done Recv: {}".format(len(data0)))
+    packed_msg_size = data0[:payload_size]
+    data0 = data0[payload_size:]
+    msg_size = struct.unpack(">L", packed_msg_size)[0]
     print("msg_size: {}".format(msg_size))
-    while len(data) < msg_size:
-        data += conn.recv(4096)
-    frame_data = data[:msg_size]
-    #data = data[msg_size:]
+    while len(data0) < msg_size:
+        data0 += conn.recv(4096)
+    frame_data0 = data0[:msg_size]
+    data0 = data0[msg_size:]
 
-    #frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-    data = pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-    frame0 = data[0]
-    frame1 = data[1]
+    frame0=pickle.loads(frame_data0, fix_imports=True, encoding="bytes")
     frame0 = cv2.imdecode(frame0, cv2.IMREAD_COLOR)
+    h,w = frame0.shape[:2]
+
+    frame0=cv2.resize(frame0,(2*w,2*h), interpolation = cv2.INTER_LINEAR)   
+    
+    cv2.imshow('ImageWindow',frame0)
+    cv2.waitKey(1)
+    ######################DATA1######################################
+    while len(data1) < payload_size:
+        print("Recv: {}".format(len(data1)))
+        data1 += conn.recv(4096)
+
+    print("Done Recv: {}".format(len(data1)))
+    packed_msg_size = data1[:payload_size]
+    data1 = data1[payload_size:]
+    msg_size = struct.unpack(">L", packed_msg_size)[0]
+    print("msg_size: {}".format(msg_size))
+    while len(data1) < msg_size:
+        data1 += conn.recv(4096)
+    frame_data1 = data1[:msg_size]
+    data1 = data1[msg_size:]
+
+    frame1=pickle.loads(frame_data1, fix_imports=True, encoding="bytes")
     frame1 = cv2.imdecode(frame1, cv2.IMREAD_COLOR)
-    h0,w0 = frame0.shape[:2]
-    h1,w1 = frame1.shape[:2]
+    h,w = frame1.shape[:2]
 
-    frame0=cv2.resize(frame0,(2*w0,2*h0), interpolation = cv2.INTER_LINEAR)
-    frame1=cv2.resize(frame1,(2*w1,2*h1), interpolation = cv2.INTER_LINEAR)   
-
-    cv2.imshow('ImageWindow0',frame0)
-    cv2.imshow('ImageWindow1',frame1)
+    frame1=cv2.resize(frame0,(2*w,2*h), interpolation = cv2.INTER_LINEAR)   
+    
+    cv2.imshow('ImageWindow',frame1)
     cv2.waitKey(1)
