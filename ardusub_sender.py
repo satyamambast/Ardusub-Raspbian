@@ -25,7 +25,7 @@ while True:
     result0, frame0 = cv2.imencode('.jpg', frame0, encode_param)
     result1, frame1 = cv2.imencode('.jpg', frame1, encode_param)
     data0 = pickle.dumps(frame0, 1)
-    data = pickle.dumps(frame1, 1)
+    data1 = pickle.dumps(frame1, 1)
     size0 = len(data0)
     size1 = len(data1)
     print("{}: {}".format(img_counter, size0))
