@@ -30,8 +30,8 @@ while True:
     size1 = len(data1)
     print("{}: {}".format(img_counter, size0))
     print("{}: {}".format(img_counter, size1))
-    client_socket.sendall(struct.pack(">L", size) + data0)
-    client_socket.sendall(struct.pack(">L", size) + data1)
+    client_socket.sendall(struct.pack(">L", size0) + data0)
+    client_socket.sendall(struct.pack(">L", size1) + data1)
     img_counter += 1
 
 cam0.release()
