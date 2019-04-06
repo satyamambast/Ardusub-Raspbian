@@ -91,5 +91,5 @@ def send_frame():
     
     
 t.start_new_thread(receive_controller_data,())
-t.start_new_thread(send_sensor_value,(0,0))
+t.start_new_thread(send_sensor_values,(0,0))
 t.start_new_thread(send_frame,())
