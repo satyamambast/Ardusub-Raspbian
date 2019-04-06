@@ -46,7 +46,7 @@ def arduino(x):
     #m = ser.readline()
     print(k)
     print(l)
-    send_sensor_values(k,l,m)
+    send_sensor_values(k,l,)
     
 
 def receive_controller_data():
@@ -61,7 +61,7 @@ def receive_controller_data():
         time.sleep(.01)
 
 
-def send_sensor_values(temp, ph, metal):    
+def send_sensor_values(temp, ph):    
     while True:
         list1 = [temp, ph, metal]
         data = pickle.dumps(list1)
@@ -91,5 +91,5 @@ def send_frame():
     
     
 t.start_new_thread(receive_controller_data,())
-t.start_new_thread(send_sensor_value,())
+t.start_new_thread(send_sensor_value,(0,0))
 t.start_new_thread(send_frame,())
