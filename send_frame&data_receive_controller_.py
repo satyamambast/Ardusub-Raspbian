@@ -43,10 +43,10 @@ def arduino(x):
     
     k = ser.readline()
     l = ser.readline()
-    m = ser.readline()
+    #m = ser.readline()
+    print(k)
+    print(l)
     send_sensor_values(k,l,m)
-    #print(k)
-    #print(l)
     
 
 def receive_controller_data():
