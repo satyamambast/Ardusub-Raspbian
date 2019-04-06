@@ -7,7 +7,7 @@ import io
 import cv2
 import serial
 
-host = ('192.168.2.2',5002)
+host = ('192.168.2.1',5002)
 global conn,addr
 print("xxxxx")
 sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -71,7 +71,7 @@ def send_sensor_values(temp, ph, metal):
 
 def send_frame():
     client_socket = socket.socket(socket.AF_INET, sock.SOCK_STREAM)
-    client_socket.connect(('192.168.2.2', 5003))
+    client_socket.connect(('192.168.2.1', 5003))
 
     cam = cv2.VideoCapture(1)
     cam.seet(3,320)
