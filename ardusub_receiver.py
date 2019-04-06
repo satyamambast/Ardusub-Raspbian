@@ -6,7 +6,7 @@ import numpy as np
 import struct 
 import zlib
 
-HOST='192.168.2.1'
+HOST='169.254.99.5'
 PORT=5003
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -24,7 +24,7 @@ data1 = b""
 payload_size = struct.calcsize(">L")
 print("payload_size: {}".format(payload_size))
 while True:
-    ######################DATA0######################################
+    #########################DATA0######################################
     while len(data0) < payload_size:
         print("Recv: {}".format(len(data0)))
         data0 += conn.recv(4096)
@@ -47,7 +47,7 @@ while True:
     
     cv2.imshow('ImageWindow',frame0)
     cv2.waitKey(1)
-    ######################DATA1######################################
+    ########################DATA1######################################
     while len(data1) < payload_size:
         print("Recv: {}".format(len(data1)))
         data1 += conn.recv(4096)

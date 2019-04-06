@@ -1,0 +1,95 @@
+import socket
+import pickle
+import _thread as t
+import time
+import struct
+import io
+import cv2
+import serial
+
+host = ('192.168.2.2',5002)
+global conn,addr
+print("xxxxx")
+sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+sock2.bind(host)
+sock2.listen(5)
+conn,addr=sock2.accept()
+
+def arduino(x):  
+    if(x==1):               #forward move8ment 2 min_rov 
+        ser.write(b'1')
+        time.sleep(1)
+    if(x==2):               #backward movement 2 min_rov 
+        ser.write(b'2')
+        time.sleep(1)
+    if(x==3):
+        ser.write(b'3')     #forward movement of spool
+        time.sleep(1)
+    if(x==4):
+        ser.write(b'4')     #backward movement of spool
+        time.sleep(1)
+    if(x==0):               #for stopping all motors of min_rov and spool
+        ser.write(b'0')
+        time.sleep(1) 
+    if(x==3):               #for manipulator forward movement
+        ser.write(b'5')
+        time.sleep(1)
+    if(x==4):               #for manipulator backward movement
+        ser.write(b'6')
+        time.sleep(1)
+    if(x==5):               #for stopping the movement of the manipulator
+        ser.write(b'7')
+        time.sleep(1)
+    
+    k = ser.readline()
+    l = ser.readline()
+    m = ser.readline()
+    send_sensor_values(k,l,m)
+    #print(k)
+    #print(l)
+    
+
+def receive_controller_data():
+    sock1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sock1.connect(('192.168.2.2',5001))
+    while True:
+        msg=sock1.recv(1024)
+        msg1 = pickle.loads(msg)
+        print("aman : ",msg1)
+        #ard = msg1[-1]
+        arduino(msg1)
+        time.sleep(.01)
+
+
+def send_sensor_values(temp, ph, metal):    
+    while True:
+        list1 = [temp, ph, metal]
+        data = pickle.dumps(list1)
+        conn.send(data)
+        time.sleep(.01)
+
+
+def send_frame():
+    client_socket = socket.socket(socket.AF_INET, sock.SOCK_STREAM)
+    client_socket.connect(('192.168.2.2', 5003))
+
+    cam = cv2.VideoCapture(1)
+    cam.seet(3,320)
+    cam.set(4, 240)
+    img_counter = 0
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+    
+    while True:
+        ret, frame = cam.read()
+        result, frame = cv2.inencode('.jpg', frame, encode_param)
+        size = len(data)
+
+        print("{}: {}".format(img_counter, size))
+        client_socket.sendall(struct.pack(">L",size) + data)
+        img_counter += 1
+    cam.release()
+    
+    
+t.start_new_thread(receive_controller_data,())
+t.start_new_thread(send_sensor_value,())
+t.start_new_thread(send_frame,())
