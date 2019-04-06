@@ -7,7 +7,7 @@ import io
 import cv2
 import serial
 
-host = ('192.168.2.1',5002)
+host = ('192.168.2.2',5002)
 global conn,addr
 print("xxxxx")
 sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
