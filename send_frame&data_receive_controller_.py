@@ -1,6 +1,6 @@
 import socket
 import pickle
-import _thread as t
+import threading
 import time
 import struct
 import io
@@ -91,6 +91,11 @@ def send_frame():
     cam.release()
     
     
-t.start_new_thread(receive_controller_data,())
-t.start_new_thread(send_sensor_values,('0','0'))
-t.start_new_thread(send_frame,())
+recv_cont = threading.Thread(target = receive_controller_data, args = ())
+send_sense = threading.Thread(target = send_sensor_values, args = ('', ''))
+send_cam = threading.Thread(target = send_frame, args = ())
+
+recv_cont.start()
+send_sense.start()
+recv_cam.start()
+
