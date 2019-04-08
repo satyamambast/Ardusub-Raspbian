@@ -15,7 +15,8 @@ sock2.bind(host)
 sock2.listen(5)
 conn,addr=sock2.accept()
 
-def arduino(x):  
+def arduino(x):
+    '''
     if(x==1):               #forward move8ment 2 min_rov 
         ser.write(b'1')
         time.sleep(1)
@@ -40,13 +41,13 @@ def arduino(x):
     if(x==5):               #for stopping the movement of the manipulator
         ser.write(b'7')
         time.sleep(1)
-    
+    '''
     k = ser.readline()
     l = ser.readline()
     #m = ser.readline()
     print(k)
     print(l)
-    send_sensor_values(k,l,)
+    send_sensor_values(k,l)
     
 
 def receive_controller_data():
@@ -91,5 +92,5 @@ def send_frame():
     
     
 t.start_new_thread(receive_controller_data,())
-t.start_new_thread(send_sensor_values,(0,0))
+t.start_new_thread(send_sensor_values,('0','0'))
 t.start_new_thread(send_frame,())
