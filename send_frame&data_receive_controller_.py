@@ -58,7 +58,7 @@ def receive_controller_data():
         msg1 = pickle.loads(msg)
         print("aman : ",msg1)
         #ard = msg1[-1]
-        #arduino(msg1)
+        arduino(msg1)
         time.sleep(.01)
 
 
