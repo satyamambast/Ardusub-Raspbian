@@ -97,5 +97,5 @@ send_cam = threading.Thread(target = send_frame, args = ())
 
 recv_cont.start()
 send_sense.start()
-recv_cam.start()
+send_cam.start()
 
