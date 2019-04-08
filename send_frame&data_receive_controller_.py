@@ -8,7 +8,7 @@ import cv2
 import serial
 
 host = ('192.168.2.2',5002)
-global conn,addr
+global conn,addr,k,l
 print("xxxxx")
 sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock2.bind(host)
@@ -16,6 +16,8 @@ sock2.listen(5)
 conn,addr=sock2.accept()
 
 def arduino(x):
+    global k
+    global l
     '''
     if(x==1):               #forward move8ment 2 min_rov 
         ser.write(b'1')
