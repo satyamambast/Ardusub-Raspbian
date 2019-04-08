@@ -52,7 +52,7 @@ def arduino(x):
 
 def receive_controller_data():
     sock1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    sock1.connect(('192.168.2.2',5001))
+    sock1.connect(('192.168.2.1',5001))
     while True:
         msg=sock1.recv(1024)
         msg1 = pickle.loads(msg)
