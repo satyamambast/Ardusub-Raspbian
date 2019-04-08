@@ -92,7 +92,7 @@ def send_frame():
     
     
 recv_cont = threading.Thread(target = receive_controller_data, args = ())
-send_sense = threading.Thread(target = arduino, args = (''))
+send_sense = threading.Thread(target = send_sensor_values, args = ('',''))
 send_cam = threading.Thread(target = send_frame, args = ())
 
 recv_cont.start()
