@@ -69,7 +69,7 @@ def send_sensor_values(temp, ph):
         conn.send(data)
         time.sleep(.01)
 
-
+'''
 def send_frame():
     client_socket = socket.socket(socket.AF_INET, sock.SOCK_STREAM)
     client_socket.connect(('192.168.2.1', 5003))
@@ -89,13 +89,13 @@ def send_frame():
         client_socket.sendall(struct.pack(">L",size) + data)
         img_counter += 1
     cam.release()
-    
+'''    
     
 recv_cont = threading.Thread(target = receive_controller_data, args = ())
 send_sense = threading.Thread(target = send_sensor_values, args = ('',''))
-send_cam = threading.Thread(target = send_frame, args = ())
+#send_cam = threading.Thread(target = send_frame, args = ())
 
 recv_cont.start()
 send_sense.start()
-send_cam.start()
+#send_cam.start()
 
