@@ -64,7 +64,7 @@ def receive_controller_data():
 
 def send_sensor_values(temp, ph):    
     while True:
-        list1 = [temp, ph, metal]
+        list1 = [temp, ph]
         data = pickle.dumps(list1)
         conn.send(data)
         time.sleep(.01)
