@@ -17,38 +17,39 @@ conn,addr=sock2.accept()
 ser = serial.Serial('/dev/ttyUSB0',9600)
 
 def arduino(x):
-    global k
-    global l
-    if(x==1):               #forward move8ment 2 min_rov 
-        ser.write(b'1')
-        time.sleep(1)
-    if(x==2):               #backward movement 2 min_rov 
-        ser.write(b'2')
-        time.sleep(1)
-    if(x==3):
-        ser.write(b'3')     #forward movement of spool
-        time.sleep(1)
-    if(x==4):
-        ser.write(b'4')     #backward movement of spool
-        time.sleep(1)
-    if(x==0):               #for stopping all motors of min_rov and spool
-        ser.write(b'0')
-        time.sleep(1) 
-    if(x==3):               #for manipulator forward movement
-        ser.write(b'5')
-        time.sleep(1)
-    if(x==4):               #for manipulator backward movement
-        ser.write(b'6')
-        time.sleep(1)
-    if(x==5):               #for stopping the movement of the manipulator
-        ser.write(b'7')
-        time.sleep(1)
-    k = ser.readline()
-    l = ser.readline()
-    #m = ser.readline()
-    print(k)
-    print(l)
-    send_sensor_values(k,l)
+    while True:
+        global k
+        global l
+        if(x==1):               #forward move8ment 2 min_rov 
+            ser.write(b'1')
+            time.sleep(1)
+        if(x==2):               #backward movement 2 min_rov 
+            ser.write(b'2')
+            time.sleep(1)
+        if(x==3):
+            ser.write(b'3')     #forward movement of spool
+            time.sleep(1)
+        if(x==4):
+            ser.write(b'4')     #backward movement of spool
+            time.sleep(1)
+        if(x==0):               #for stopping all motors of min_rov and spool
+            ser.write(b'0')
+            time.sleep(1) 
+        if(x==3):               #for manipulator forward movement
+            ser.write(b'5')
+            time.sleep(1)
+        if(x==4):               #for manipulator backward movement
+            ser.write(b'6')
+            time.sleep(1)
+        if(x==5):               #for stopping the movement of the manipulator
+            ser.write(b'7')
+            time.sleep(1)
+        k = ser.readline()
+        l = ser.readline()
+        #m = ser.readline()
+        print(k)
+        print(l)
+        send_sensor_values(k,l)
  
 
 def receive_controller_data():
@@ -59,7 +60,7 @@ def receive_controller_data():
         msg1 = pickle.loads(msg)
         print("aman : ",msg1)
         #ard = msg1[-1]
-        #arduino(msg1)
+        arduino(1)
         time.sleep(.01)
 
 
