@@ -6,6 +6,14 @@ import struct
 import io
 import cv2
 import serial
+class MultiCam:
+	def __init__(self,frame1,frame2):
+		self.frame1=frame1
+		self.frame2=frame2
+	def displayallfeeds(self):
+		cv2.imshow('cam1',frame1)
+		cv2.imshow('cam2',frame2)
+		
 
 host = ('192.168.2.2',5005)
 global conn,addr,k,l
@@ -70,7 +78,7 @@ def send_sensor_values(temp, ph):
         conn.send(data)
         time.sleep(.01)
 
-'''
+
 def send_frame():
     client_socket = socket.socket(socket.AF_INET, sock.SOCK_STREAM)
     client_socket.connect(('192.168.2.1', 5003))
@@ -90,7 +98,7 @@ def send_frame():
         client_socket.sendall(struct.pack(">L",size) + data)
         img_counter += 1
     cam.release()
-'''    
+    
     
 recv_cont = threading.Thread(target = receive_controller_data, args = ())
 send_sense = threading.Thread(target = send_sensor_values, args = ('',''))
