@@ -15,7 +15,7 @@ sock2.bind(host)
 sock2.listen(5)
 conn,addr=sock2.accept()
 ser = serial.Serial('/dev/ttyACM0',9600)
-
+'''
 def arduino(x):
     global k
     global l
@@ -49,7 +49,7 @@ def arduino(x):
     print(k)
     print(l)
     send_sensor_values(k,l)
-    
+''' 
 
 def receive_controller_data():
     sock1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -59,7 +59,7 @@ def receive_controller_data():
         msg1 = pickle.loads(msg)
         print("aman : ",msg1)
         #ard = msg1[-1]
-        arduino(msg1)
+        #arduino(msg1)
         time.sleep(.01)
 
 
