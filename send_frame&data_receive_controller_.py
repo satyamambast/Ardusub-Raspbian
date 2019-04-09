@@ -46,8 +46,8 @@ def arduino(x):
     k = ser.readline()
     l = ser.readline()
     #m = ser.readline()
-    print(k)
-    print(l)
+    #print(k)
+    #print(l)
     send_sensor_values(k,l)
  
 
@@ -93,10 +93,10 @@ def send_frame():
 '''    
     
 recv_cont = threading.Thread(target = receive_controller_data, args = ())
-send_sense = threading.Thread(target = send_sensor_values, args = ('',''))
+#send_sense = threading.Thread(target = arduino, args = (''))
 #send_cam = threading.Thread(target = send_frame, args = ())
 
 recv_cont.start()
-send_sense.start()
+#send_sense.start()
 #send_cam.start()
 
