@@ -1,7 +1,7 @@
 import serial
 import time
 
-ser = serial.Serial('/dev/tty.usbserial',9600)
+ser = serial.Serial('/dev/ttyUSB0',9600)
 
 while True:
     t = int(input('Enter 0 to 7-->\n'))
