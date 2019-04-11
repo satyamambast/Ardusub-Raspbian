@@ -7,9 +7,11 @@ import io
 import cv2
 import serial
 class MultiCam:
-	def __init__(self,frame1,frame2):
-		self.frame1=frame1
-		self.frame2=frame2
+	def __init__(self,cam1,cam2,cam3,cam4):
+		self.cam1=cam1
+		self.cam2=cam2
+        self.cam3=cam3
+        self.cam4=cam4
 	def displayallfeeds(self):
 		cv2.imshow('cam1',frame1)
 		cv2.imshow('cam2',frame2)
@@ -83,15 +85,26 @@ def send_frame():
     client_socket = socket.socket(socket.AF_INET, sock.SOCK_STREAM)
     client_socket.connect(('192.168.2.1', 5003))
 
-    cam = cv2.VideoCapture(1)
-    cam.seet(3,320)
-    cam.set(4, 240)
+    cam1 = cv2.VideoCapture(0)
+    cam1.set(3,320)
+    cam1.set(4, 240)
+    cam2 = cv2.VideoCapture(1)
+    cam2.set(3,320)
+    cam2.set(4, 240)
+    cam3 = cv2.VideoCapture(2)
+    cam3.set(3,320)
+    cam3.set(4, 240)
+    cam4 = cv2.VideoCapture(3)
+    cam4.set(3,320)
+    cam4.set(4, 240)
+
     img_counter = 0
     encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
     
     while True:
         ret, frame = cam.read()
         result, frame = cv2.inencode('.jpg', frame, encode_param)
+        data=pickle.dumps(obj,1)
         size = len(data)
 
         print("{}: {}".format(img_counter, size))
