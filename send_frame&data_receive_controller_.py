@@ -7,14 +7,31 @@ import io
 import cv2
 import serial
 class MultiCam:
-	def __init__(self,cam1,cam2,cam3,cam4):
-		self.cam1=cam1
-		self.cam2=cam2
-        self.cam3=cam3
-        self.cam4=cam4
-	def displayallfeeds(self):
-		cv2.imshow('cam1',frame1)
-		cv2.imshow('cam2',frame2)
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+    def __init__(self):
+        self.frame1=None
+        self.frame2=None
+        self.frame3=None
+        self.frame4=None
+    def encodepossible(self,cam1,cam2,cam3,cam4):
+        self.ret1, frame1 = cam1.read()
+        self.ret2, frame2 = cam2.read()
+        self.ret3, frame3 = cam3.read()
+        self.ret4, frame4 = cam4.read()
+        if ret1:
+            result, self.frame1 = cv2.imencode('.jpg', frame1, encode_param)            
+        elif ret2:
+            result, self.frame2 = cv2.imencode('.jpg', frame2, encode_param)            
+        elif ret3:
+            result, self.frame3 = cv2.imencode('.jpg', frame3, encode_param)            
+        elif ret3:
+            result, self.frame4 = cv2.imencode('.jpg', frame4, encode_param)            
+
+    def displayallfeeds(self):
+	cv2.imshow('cam1',self.frame1)
+	cv2.imshow('cam2',self.frame2)
+	cv2.imshow('cam3',self.frame3)
+	cv2.imshow('cam4',self.frame4)
 		
 
 host = ('192.168.2.2',5005)
@@ -99,11 +116,13 @@ def send_frame():
     cam4.set(4, 240)
 
     img_counter = 0
-    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+    
     
     while True:
-        ret, frame = cam.read()
-        result, frame = cv2.inencode('.jpg', frame, encode_param)
+        obj=MultiCam()
+        obj.encodepossible(cam1,cam2,cam3,cam4)
+        #ret, frame = cam.read()
+        #result, frame = cv2.inencode('.jpg', frame, encode_param)
         data=pickle.dumps(obj,1)
         size = len(data)
 
