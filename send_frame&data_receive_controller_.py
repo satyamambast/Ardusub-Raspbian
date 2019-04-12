@@ -8,7 +8,7 @@ import cv2
 import serial
 
 host = ('192.168.2.2',5005)
-global conn,addr,k,l
+global conn,addr,k,l,msg1
 print("xxxxx")
 sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock2.bind(host)
@@ -52,6 +52,7 @@ def arduino(x):
  
 
 def receive_controller_data():
+    global msg1
     sock1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     sock1.connect(('192.168.2.1',5004))
     while True:
