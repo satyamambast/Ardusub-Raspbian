@@ -1,10 +1,10 @@
 import serial
 import time
 
-ser = serial.Serial('/dev/ttyUSB0',9600)
+ser = serial.Serial('/dev/ttyUSB3',9600)
 def cont(t):
     while True:
-        #t = int(input('Enter 0 to 7-->\n'))
+        t = int(input('Enter 0 to 7-->\n'))
         if(t==1):               #forward move8ment 2 min_rov 
             ser.write(b'1')
             time.sleep(1)

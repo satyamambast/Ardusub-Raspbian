@@ -8,7 +8,8 @@ import cv2
 import serial
 
 host = ('192.168.2.2',5058)
-global conn,addr,k,msg1
+global conn,addr,k
+msg1=[]
 print("xxxxx")
 sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock2.bind(host)
@@ -17,31 +18,32 @@ conn,addr=sock2.accept()
 ser = serial.Serial('/dev/ttyUSB0',9600)
 
 def arduino(x):
-    print("1")
     print("scam:",x)
-    print("2")
-    if(x==1):               #forward move8ment 2 min_rov 
+    if len(x)==0:
+	k = ser.readline()
+	return k
+    if(x[8]==1):               #forward move8ment 2 min_rov Y 
         ser.write(b'1')
         time.sleep(1)
-    if(x==2):               #backward movement 2 min_rov 
+    if(x[5]==1):               #backward movement 2 min_rov A
         ser.write(b'2')
         time.sleep(1)
-    if(x==3):
+    if(x[10]==1):
         ser.write(b'3')     #forward movement of spool
         time.sleep(1)
-    if(x==4):
+    if(x[9]==1):
         ser.write(b'4')     #backward movement of spool
         time.sleep(1)
-    if(x==0):               #for stopping all motors of min_rov and spool
+    if(x[6]==1):               #for stopping all motors of min_rov and spool
         ser.write(b'0')
         time.sleep(1) 
-    if(x==3):               #for manipulator forward movement
+    if(x[2]==-1):               #for manipulator forward movement
         ser.write(b'5')
         time.sleep(1)
-    if(x==4):               #for manipulator backward movement
+    if(x[2]==1):               #for manipulator backward movement
         ser.write(b'6')
         time.sleep(1)
-    if(x==5):               #for stopping the movement of the manipulator
+    if(x[7]==1):               #for stopping the movement of the manipulator
         ser.write(b'7')
         time.sleep(1)
     k = ser.readline()
@@ -56,14 +58,15 @@ def receive_controller_data():
     while True:
         msg=sock1.recv(1024)
         msg1 = pickle.loads(msg)
-        print("aman : ",msg1)
+        #print("aman : ",msg1)
         #ard = msg1[-1]
         time.sleep(.01)
 
 
 def send_sensor_values():
-    temp = arduino(1) 
+    global msg1 
     while True:
+	temp = arduino(msg1)
         list1 = [temp]
         print("alive: ",send_sense.is_alive())
         data = pickle.dumps(list1)
