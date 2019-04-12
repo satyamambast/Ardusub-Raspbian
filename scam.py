@@ -65,7 +65,7 @@ def send_sensor_values():
     temp = arduino(1) 
     while True:
         list1 = [temp]
-	print("alive: ",send_sense.is_alive())
+        print("alive: ",send_sense.is_alive())
         data = pickle.dumps(list1)
         conn.send(data)
         time.sleep(.01)
