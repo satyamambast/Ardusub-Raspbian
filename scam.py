@@ -28,10 +28,10 @@ class MultiCam:
             result, self.frame4 = cv2.imencode('.jpg', frame4, encode_param)            
 
     def displayallfeeds(self):
-	cv2.imshow('cam1',self.frame1)
-	cv2.imshow('cam2',self.frame2)
-	cv2.imshow('cam3',self.frame3)
-	cv2.imshow('cam4',self.frame4)
+	    cv2.imshow('cam1',self.frame1)
+	    cv2.imshow('cam2',self.frame2)
+	    cv2.imshow('cam3',self.frame3)
+	    cv2.imshow('cam4',self.frame4)
 host = ('192.168.2.2',5058)
 global conn,addr,k
 msg1=[]
@@ -101,7 +101,6 @@ def send_sensor_values():
 def send_frame():
     client_socket = socket.socket(socket.AF_INET, sock.SOCK_STREAM)
     client_socket.connect(('192.168.2.1', 5003))
-
     cam1 = cv2.VideoCapture(0)
     cam1.set(3,320)
     cam1.set(4, 240)
@@ -114,10 +113,7 @@ def send_frame():
     cam4 = cv2.VideoCapture(3)
     cam4.set(3,320)
     cam4.set(4, 240)
-
     img_counter = 0
-    
-    
     while True:
         obj=MultiCam()
         obj.encodepossible(cam1,cam2,cam3,cam4)
@@ -134,10 +130,10 @@ def send_frame():
 recv_cont = threading.Thread(target = receive_controller_data, args = ())
 send_sense = threading.Thread(target = send_sensor_values, args = ())
 #ard = threading.Thread(target = arduino, args = (1))
-#send_cam = threading.Thread(target = send_frame, args = ())
+send_cam = threading.Thread(target = send_frame, args = ())
 
 recv_cont.start()
 send_sense.start()
 #ard.start()
-#send_cam.start()
+send_cam.start()
 
