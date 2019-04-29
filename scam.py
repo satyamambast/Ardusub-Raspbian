@@ -6,6 +6,10 @@ import struct
 import io
 import cv2
 import serial
+l1=0
+l2=1
+l3=2
+boro=3
 class MultiCam:
     
     def __init__(self):
@@ -13,27 +17,41 @@ class MultiCam:
         self.frame2=None
         self.frame3=None
         self.frame4=None
+    
     def encodepossible(self,cam1,cam2,cam3,cam4):
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
-        self.ret1, frame1 = cam1.read()
-        self.ret2, frame2 = cam2.read()
-        self.ret3, frame3 = cam3.read()
-        self.ret4, frame4 = cam4.read()
-        if self.ret1:
-            result, self.frame1 = cv2.imencode('.jpg', frame1, encode_param)            
-        elif self.ret2:
-            result, self.frame2 = cv2.imencode('.jpg', frame2, encode_param)            
-        elif self.ret3:
-            result, self.frame3 = cv2.imencode('.jpg', frame3, encode_param)            
-        elif self.ret4:
-            result, self.frame4 = cv2.imencode('.jpg', frame4, encode_param)            
+        if msg1[-1]==0:
+            if cam4.isOpened():
+                cam4.release()
+                cam1.open(l1)
+                cam2.open(l2)
+                cam3.open(l3)
+            self.ret1, frame1 = cam1.read()
+            self.ret2, frame2 = cam2.read()
+            self.ret3, frame3 = cam3.read()
+            #self.ret4, frame4 = cam4.read()
+            if self.ret1:
+                result, self.frame1 = cv2.imencode('.jpg', frame1, encode_param)            
+            elif self.ret2:
+                result, self.frame2 = cv2.imencode('.jpg', frame2, encode_param)            
+            elif self.ret3:
+                result, self.frame3 = cv2.imencode('.jpg', frame3, encode_param)
+        else:
+            if cam1.isOpened():
+                cam1.release()
+                cam2.release()
+                cam3.release()
+                cam4.open(boro)
+            self.ret4,frame4=cam4.read()        
+            if self.ret4:
+                result, self.frame4 = cv2.imencode('.jpg', frame4, encode_param)            
 
     def displayallfeeds(self):
 	    cv2.imshow('cam1',self.frame1)
 	    cv2.imshow('cam2',self.frame2)
 	    cv2.imshow('cam3',self.frame3)
 	    cv2.imshow('cam4',self.frame4)
-"""
+
 host = ('192.168.2.2',5058)
 global conn,addr,k
 msg1=[]
@@ -43,7 +61,7 @@ sock2.bind(host)
 sock2.listen(5)
 conn,addr=sock2.accept()
 ser = serial.Serial('/dev/ttyUSB0',9600)
-"""
+
 def arduino(x):
     print("scam:",x)
     if len(x)==0:
@@ -103,18 +121,19 @@ def send_sensor_values():
 def send_frame():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('localhost', 5004))
-    cam1 = cv2.VideoCapture(0)
+    cam1 = cv2.VideoCapture(l1)
     cam1.set(3,320)
     cam1.set(4, 240)
-    cam2 = cv2.VideoCapture(1)
+    cam2 = cv2.VideoCapture(l2)
     cam2.set(3,320)
     cam2.set(4, 240)
-    cam3 = cv2.VideoCapture(2)
+    cam3 = cv2.VideoCapture(l3)
     cam3.set(3,320)
     cam3.set(4, 240)
     cam4 = cv2.VideoCapture(3)
     cam4.set(3,320)
     cam4.set(4, 240)
+    cam4.release()
     img_counter = 0
     while True:
         obj=MultiCam()
@@ -127,7 +146,10 @@ def send_frame():
         print("{}: {}".format(img_counter, size))
         client_socket.sendall(struct.pack(">L",size) + data)
         img_counter += 1
-    cam.release()
+    cam1.release()
+    cam2.release()
+    cam3.release()
+    cam4.release()
     
 #recv_cont = threading.Thread(target = receive_controller_data, args = ())
 #send_sense = threading.Thread(target = send_sensor_values, args = ())
