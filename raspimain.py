@@ -77,7 +77,7 @@ sock2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock2.bind(host)
 sock2.listen(5)
 conn,addr=sock2.accept()
-#ser = serial.Serial('/dev/ttyUSB0',9600)
+ser = serial.Serial('/dev/ttyUSB0',9600)
 
 def arduino(x):
     print("scam:",x)
